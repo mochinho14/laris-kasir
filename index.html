@@ -6,7 +6,7 @@
 <title>Laris: Aplikasi Kasir Pribadi</title>
 <link rel="stylesheet" href="style.css">
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#166534">
+<meta name="theme-color" content="#FAFBF8">
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 </head>
@@ -18,20 +18,20 @@
 </header>
 
 <div class="tabs" id="tabs">
-<button data-tab="beranda" class="active">Beranda</button>
-<button data-tab="kasir">Kasir</button>
-<button data-tab="riwayat">Riwayat</button>
-<button data-tab="kelola">Kelola</button>
-<button data-tab="laporan">Laporan</button>
+<button data-tab="beranda" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11 12 4l8 7"/><path d="M6.5 9.5V20h11V9.5"/></svg><span>Beranda</span></button>
+<button data-tab="kasir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9.5" cy="20" r="1.4"/><circle cx="17" cy="20" r="1.4"/><path d="M3 3.5h2l2.5 11h10.8l1.9-7.5H7"/></svg><span>Kasir</span></button>
+<button data-tab="riwayat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3.5h12V21l-2-1.4-2 1.4-2-1.4L10 21l-2-1.4L6 21z"/><path d="M9.5 8.5h5M9.5 12.5h5"/></svg><span>Riwayat</span></button>
+<button data-tab="kelola"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="1.8"/><rect x="13" y="4" width="7" height="7" rx="1.8"/><rect x="4" y="13" width="7" height="7" rx="1.8"/><rect x="13" y="13" width="7" height="7" rx="1.8"/></svg><span>Kelola</span></button>
+<button data-tab="laporan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 20.5h17"/><path d="M6.5 20.5v-6"/><path d="M12 20.5v-11"/><path d="M17.5 20.5V7"/></svg><span>Laporan</span></button>
 </div>
 
 <!-- BERANDA -->
 <section class="panel active" id="panel-beranda">
 <div class="stat-grid">
-<div class="stat-box"><div class="l">Penjualan hari ini</div><div class="n" id="b-jual">Rp0</div><div class="delta" id="b-jual-delta"></div><div class="l" id="b-jual-meta"></div></div>
-<div class="stat-box"><div class="l">Laba kotor hari ini</div><div class="n" id="b-laba">Rp0</div><div class="l" id="b-laba-meta"></div></div>
-<div class="stat-box"><div class="l">Saldo Kas</div><div class="n" id="b-kas">Rp0</div><div class="l">Kas manual + penjualan tunai</div></div>
-<div class="stat-box"><div class="l">Order pending</div><div class="n" id="b-pending">0</div><div class="l">Transaksi tertahan di kasir</div></div>
+<div class="stat-box c-pink"><div class="l">Penjualan hari ini</div><div class="n" id="b-jual">Rp0</div><div class="delta" id="b-jual-delta"></div><div class="l meta2" id="b-jual-meta"></div></div>
+<div class="stat-box c-kuning"><div class="l">Laba kotor hari ini</div><div class="n" id="b-laba">Rp0</div><div class="l meta2" id="b-laba-meta"></div></div>
+<div class="stat-box c-biru"><div class="l">Saldo Kas</div><div class="n" id="b-kas">Rp0</div><div class="l meta2">Kas manual + penjualan tunai</div></div>
+<div class="stat-box c-peach"><div class="l">Order pending</div><div class="n" id="b-pending">0</div><div class="l meta2">Transaksi tertahan di kasir</div></div>
 </div>
 <div class="card" style="margin-top:16px">
 <h2>Tren Penjualan 7 Hari</h2>

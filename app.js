@@ -1,6 +1,14 @@
 // ---------- util dasar ----------
 function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
 const rp = n => 'Rp' + new Intl.NumberFormat('id-ID').format(Math.round(n || 0));
+// kelas warna pastel per kategori produk (bahasa warna Warm Workspace)
+function katClass(kategori) {
+  const k = (kategori || '').toLowerCase();
+  if (k.includes('frozen')) return 'cat-biru';
+  if (k.includes('minuman')) return 'cat-kuning';
+  if (k.includes('sembako')) return 'cat-peach';
+  return 'cat-netral';
+}
 function esc(s) {
   return String(s == null ? '' : s).replace(/[&<>"']/g, c =>
     ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -279,7 +287,7 @@ function renderKatalog() {
     const low = !habis && p.stok <= p.stokMin;
     const initials = p.nama.split(' ').slice(0, 2).map(w => w[0]).join('').toUpperCase();
     return '<button class="prod-row" data-add="' + p.id + '"' + (habis ? ' disabled' : '') + '>' +
-      '<span class="avatar">' + esc(initials) + '</span><span class="info"><span class="n">' + esc(p.nama) +
+      '<span class="avatar ' + katClass(p.kategori) + '">' + esc(initials) + '</span><span class="info"><span class="n">' + esc(p.nama) +
       '</span><br><span class="h">' + rp(p.hargaJual) + '</span> ' +
       '<span class="s' + (low || habis ? ' low' : '') + '">' + (habis ? 'stok habis' : 'sisa ' + p.stok + (low ? ' (menipis)' : '')) + '</span></span>' +
       '<span class="add-btn">+</span></button>';

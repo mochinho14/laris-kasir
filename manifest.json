@@ -1,1 +1,32 @@
-{"background_color":"#f7f7f5","description":"Aplikasi kasir pribadi: catat penjualan, pantau stok, baca laba. Jalan offline, data di perangkatmu.","display":"standalone","icons":[{"purpose":"any","sizes":"192x192","src":"icon-192.png","type":"image/png"},{"purpose":"any","sizes":"512x512","src":"icon-512.png","type":"image/png"},{"purpose":"maskable","sizes":"512x512","src":"icon-512.png","type":"image/png"}],"lang":"id","name":"Laris: Aplikasi Kasir Pribadi","orientation":"portrait","scope":".","short_name":"Laris","start_url":".","theme_color":"#166534"}
+{
+  "background_color": "#FAFBF8",
+  "description": "Aplikasi kasir pribadi: catat penjualan, pantau stok, baca laba. Jalan offline, data di perangkatmu.",
+  "display": "standalone",
+  "icons": [
+    {
+      "purpose": "any",
+      "sizes": "192x192",
+      "src": "icon-192.png",
+      "type": "image/png"
+    },
+    {
+      "purpose": "any",
+      "sizes": "512x512",
+      "src": "icon-512.png",
+      "type": "image/png"
+    },
+    {
+      "purpose": "maskable",
+      "sizes": "512x512",
+      "src": "icon-512.png",
+      "type": "image/png"
+    }
+  ],
+  "lang": "id",
+  "name": "Laris: Aplikasi Kasir Pribadi",
+  "orientation": "portrait",
+  "scope": ".",
+  "short_name": "Laris",
+  "start_url": ".",
+  "theme_color": "#FAFBF8"
+}
