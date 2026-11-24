@@ -875,3 +875,25 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js').catch(() => {});
   });
 }
+
+// ---------- drawer navigasi (gaya POS) ----------
+const drawerEl = document.getElementById('tabs');
+const overlayEl = document.getElementById('drawer-overlay');
+const TAB_TITLES = { beranda: 'Beranda', kasir: 'Kasir', riwayat: 'Riwayat', kelola: 'Kelola', laporan: 'Laporan' };
+function syncChrome() {
+  const aktif = document.querySelector('#tabs button.active');
+  if (aktif) document.getElementById('topbar-title').textContent = TAB_TITLES[aktif.dataset.tab] || 'Laris';
+  const nama = (DB.settings && DB.settings.namaToko) || 'Toko Saya';
+  document.getElementById('drawer-name').textContent = nama;
+  const awal = nama.trim().charAt(0).toUpperCase() || 'L';
+  document.getElementById('drawer-avatar').textContent = awal;
+  document.getElementById('topbar-avatar').textContent = awal;
+}
+function openDrawer() { drawerEl.classList.add('open'); overlayEl.classList.add('show'); syncChrome(); }
+function closeDrawer() { drawerEl.classList.remove('open'); overlayEl.classList.remove('show'); }
+document.getElementById('menu-btn').addEventListener('click', openDrawer);
+overlayEl.addEventListener('click', closeDrawer);
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
+document.querySelectorAll('#tabs button').forEach(b =>
+  b.addEventListener('click', () => { closeDrawer(); syncChrome(); }));
+syncChrome();

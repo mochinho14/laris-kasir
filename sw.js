@@ -1,6 +1,6 @@
 // Laris service worker: simpan file aplikasi di cache supaya
 // aplikasi bisa dibuka dan dipakai tanpa internet (offline-first).
-const CACHE = 'laris-v3-cache-1';
+const CACHE = 'laris-v4-cache-1';
 const FILES = [
   './',
   './index.html',

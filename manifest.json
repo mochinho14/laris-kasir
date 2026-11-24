@@ -1,5 +1,5 @@
 {
-  "background_color": "#FAFBF8",
+  "background_color": "#F3F4F1",
   "description": "Aplikasi kasir pribadi: catat penjualan, pantau stok, baca laba. Jalan offline, data di perangkatmu.",
   "display": "standalone",
   "icons": [
@@ -28,5 +28,5 @@
   "scope": ".",
   "short_name": "Laris",
   "start_url": ".",
-  "theme_color": "#FAFBF8"
+  "theme_color": "#F3F4F1"
 }
