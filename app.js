@@ -484,12 +484,12 @@ function renderRiwayat() {
 document.querySelectorAll('#k-chips button').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('#k-chips button').forEach(b => b.classList.toggle('active', b === btn));
-    ['produk', 'pelanggan', 'stok', 'pembelian', 'kas'].forEach(k =>
+    ['produk', 'pelanggan', 'stok', 'pembelian', 'kas', 'data'].forEach(k =>
       document.getElementById('k-' + k).style.display = k === btn.dataset.k ? '' : 'none');
     renderKelola();
   });
 });
-function renderKelola() { renderProduk(); renderPelanggan(); renderStok(); renderPembelian(); renderKas(); }
+function renderKelola() { renderProduk(); renderPelanggan(); renderStok(); renderPembelian(); renderKas(); renderDataInfo(); }
 
 // produk
 function renderProduk() {
@@ -883,6 +883,8 @@ const TAB_TITLES = { beranda: 'Beranda', kasir: 'Kasir', riwayat: 'Riwayat', kel
 function syncChrome() {
   const aktif = document.querySelector('#tabs button.active');
   if (aktif) document.getElementById('topbar-title').textContent = TAB_TITLES[aktif.dataset.tab] || 'Laris';
+  document.querySelectorAll('#bottomnav button').forEach(x =>
+    x.classList.toggle('active', !!aktif && x.dataset.tab === aktif.dataset.tab));
   const nama = (DB.settings && DB.settings.namaToko) || 'Toko Saya';
   document.getElementById('drawer-name').textContent = nama;
   const awal = nama.trim().charAt(0).toUpperCase() || 'L';
@@ -896,4 +898,57 @@ overlayEl.addEventListener('click', closeDrawer);
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
 document.querySelectorAll('#tabs button').forEach(b =>
   b.addEventListener('click', () => { closeDrawer(); syncChrome(); }));
+syncChrome();
+
+// ---------- backup & pulihkan data ----------
+function renderDataInfo() {
+  const el = document.getElementById('data-info');
+  if (!el) return;
+  const kb = ((localStorage.getItem(KEY) || '').length / 1024).toFixed(1);
+  el.textContent = 'Data saat ini: ' + DB.produk.length + ' produk, ' + DB.transaksi.length +
+    ' transaksi, ' + DB.pelanggan.length + ' pelanggan, ' + DB.kas.length +
+    ' catatan kas. Ukuran data ' + kb + ' KB.';
+}
+document.getElementById('data-backup').addEventListener('click', () => {
+  const now = new Date();
+  const tgl = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' +
+    String(now.getDate()).padStart(2, '0');
+  const blob = new Blob([localStorage.getItem(KEY) || JSON.stringify(DB)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'laris-backup-' + tgl + '.json';
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  setStatus('data-msg', 'Backup terunduh: ' + a.download + '. Simpan file ini di tempat aman.', true);
+});
+document.getElementById('data-restore-btn').addEventListener('click', () =>
+  document.getElementById('data-file').click());
+document.getElementById('data-file').addEventListener('change', e => {
+  const f = e.target.files[0];
+  e.target.value = '';
+  if (!f) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    let parsed = null;
+    try { parsed = JSON.parse(reader.result); } catch (err) {}
+    if (!parsed || !Array.isArray(parsed.produk) || !Array.isArray(parsed.transaksi) || !parsed.settings) {
+      setStatus('data-msg', 'File ini bukan backup Laris yang valid. Data sekarang tidak berubah.', false);
+      return;
+    }
+    const ringkas = parsed.produk.length + ' produk, ' + parsed.transaksi.length +
+      ' transaksi, toko "' + (parsed.settings.namaToko || 'Toko Saya') + '"';
+    if (!confirm('Pulihkan backup berisi ' + ringkas + '? Data yang sekarang ada di perangkat ini akan DIGANTI seluruhnya.')) return;
+    localStorage.setItem(KEY, JSON.stringify(parsed));
+    location.reload();
+  };
+  reader.readAsText(f);
+});
+renderDataInfo();
+
+// ---------- navigasi bawah ----------
+document.querySelectorAll('#bottomnav button').forEach(b =>
+  b.addEventListener('click', () => {
+    const t = document.querySelector('#tabs button[data-tab="' + b.dataset.tab + '"]');
+    if (t) t.click();
+  }));
 syncChrome();

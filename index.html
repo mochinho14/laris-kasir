@@ -32,6 +32,14 @@
 <div class="drawer-foot">Laris · jalan offline, data tersimpan lokal di perangkat ini</div>
 </div>
 
+<nav class="bottomnav" id="bottomnav">
+<button data-tab="beranda" class="active"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.2 12 4l8 7.2"/><path d="M6.2 9.8V20h11.6V9.8"/><path d="M9.8 20v-5.4h4.4V20"/></svg></span><span>Beranda</span></button>
+<button data-tab="kasir"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2.2l2.3 11.2a1.5 1.5 0 0 0 1.5 1.2h7.9a1.5 1.5 0 0 0 1.5-1.2L20.4 8H6"/><circle cx="9.6" cy="20" r="1.3"/><circle cx="17.4" cy="20" r="1.3"/></svg></span><span>Kasir</span></button>
+<button data-tab="riwayat"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3.5h12V20l-2-1.4L14 20l-2-1.4L10 20l-2-1.4L6 20Z"/><path d="M9.2 8.4h5.6M9.2 12h5.6"/></svg></span><span>Riwayat</span></button>
+<button data-tab="kelola"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="1.8"/><rect x="13" y="4" width="7" height="7" rx="1.8"/><rect x="4" y="13" width="7" height="7" rx="1.8"/><rect x="13" y="13" width="7" height="7" rx="1.8"/></svg></span><span>Kelola</span></button>
+<button data-tab="laporan"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 20.5h17"/><path d="M6.5 20.5v-6"/><path d="M12 20.5v-11"/><path d="M17.5 20.5V7"/></svg></span><span>Laporan</span></button>
+</nav>
+
 <!-- BERANDA -->
 <section class="panel active" id="panel-beranda">
 <div class="stat-grid">
@@ -126,6 +134,7 @@
 <button data-k="stok">Stok</button>
 <button data-k="pembelian">Pembelian</button>
 <button data-k="kas">Kas</button>
+<button data-k="data">Data</button>
 </div>
 
 <div class="card" id="k-produk">
@@ -199,6 +208,18 @@
 <div class="status" id="ks-msg"></div>
 <table id="ks-tabel"></table>
 </div>
+
+<div class="card" id="k-data" style="display:none">
+<h2>Backup dan Pulihkan Data</h2>
+<p class="sub">Semua data Laris tersimpan lokal di browser perangkat ini, tanpa server. Unduh file backup secara berkala supaya data aman kalau data browser dibersihkan atau ganti HP. File backup yang sama bisa dipulihkan di perangkat mana pun.</p>
+<p class="sub" id="data-info" style="margin-bottom:2px"></p>
+<div class="row">
+<button class="go" id="data-backup" style="flex:1 1 160px">Unduh Backup</button>
+<button class="ghost" id="data-restore-btn" style="flex:1 1 160px">Pulihkan dari File</button>
+</div>
+<input type="file" id="data-file" accept=".json,application/json" style="display:none">
+<div class="status" id="data-msg"></div>
+</div>
 </section>
 
 <!-- LAPORAN -->
@@ -243,7 +264,7 @@
 </div>
 </section>
 
-<footer>Laris &middot; data tersimpan lokal di browser ini (localStorage) &middot; ekspor CSV berkala sebagai cadangan</footer>
+<footer>Laris &middot; data tersimpan lokal di browser ini (localStorage) &middot; backup berkala lewat Kelola &gt; Data</footer>
 </div>
 
 <!-- STRUK -->
