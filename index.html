@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Laris: Aplikasi Kasir Pribadi</title>
+<link rel="stylesheet" href="style.css">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#166534">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+</head>
+<body>
+<div class="wrap">
+<header>
+<h1>Laris<span>.</span></h1>
+<p>Aplikasi kasir pribadi: catat penjualan, pantau stok, baca laba. Jalan offline, data di perangkatmu.</p>
+</header>
+
+<div class="tabs" id="tabs">
+<button data-tab="beranda" class="active">Beranda</button>
+<button data-tab="kasir">Kasir</button>
+<button data-tab="riwayat">Riwayat</button>
+<button data-tab="kelola">Kelola</button>
+<button data-tab="laporan">Laporan</button>
+</div>
+
+<!-- BERANDA -->
+<section class="panel active" id="panel-beranda">
+<div class="stat-grid">
+<div class="stat-box"><div class="l">Penjualan hari ini</div><div class="n" id="b-jual">Rp0</div><div class="delta" id="b-jual-delta"></div><div class="l" id="b-jual-meta"></div></div>
+<div class="stat-box"><div class="l">Laba kotor hari ini</div><div class="n" id="b-laba">Rp0</div><div class="l" id="b-laba-meta"></div></div>
+<div class="stat-box"><div class="l">Saldo Kas</div><div class="n" id="b-kas">Rp0</div><div class="l">Kas manual + penjualan tunai</div></div>
+<div class="stat-box"><div class="l">Order pending</div><div class="n" id="b-pending">0</div><div class="l">Transaksi tertahan di kasir</div></div>
+</div>
+<div class="card" style="margin-top:16px">
+<h2>Tren Penjualan 7 Hari</h2>
+<p class="sub" id="b-tren-meta"></p>
+<div class="tren" id="b-tren"></div>
+</div>
+<div class="card">
+<h2>Metode Pembayaran 7 Hari Terakhir</h2>
+<div id="b-metode"></div>
+</div>
+<div class="card">
+<h2>Produk Terlaris 7 Hari Terakhir</h2>
+<p class="sub">Berdasarkan jumlah terjual</p>
+<div id="b-laris"></div>
+</div>
+<div class="card">
+<h2>Stok Menipis</h2>
+<div id="b-stok"></div>
+</div>
+</section>
+
+<!-- KASIR -->
+<section class="panel" id="panel-kasir">
+<div class="kasir-grid">
+<div class="card">
+<h2>Katalog</h2>
+<input type="text" id="cari" placeholder="Cari produk atau SKU">
+<div class="chips" id="chips"></div>
+<div id="produk-list"></div>
+</div>
+<div class="card">
+<h2>Keranjang</h2>
+<label class="f">Pelanggan</label>
+<select id="cart-pelanggan"></select>
+<div id="cart-items"></div>
+<div class="total-line"><span>Total</span><span id="cart-total">Rp0</span></div>
+<label class="f">Metode pembayaran</label>
+<select id="metode">
+<option value="Tunai">Tunai</option>
+<option value="QRIS">QRIS</option>
+<option value="Debit">Debit</option>
+<option value="Kredit">Kredit</option>
+<option value="Transfer">Transfer</option>
+</select>
+<div id="tunai-box">
+<label class="f">Uang diterima</label>
+<input type="number" id="bayar" placeholder="0" min="0">
+<div class="kembalian" id="kembalian-line" style="display:none"><span>Kembalian</span><span id="kembalian">Rp0</span></div>
+</div>
+<div class="row">
+<button class="ghost" id="tahan-btn" style="flex:1 1 120px">Tahan (Pending)</button>
+<button class="go" id="bayar-btn" style="flex:1 1 150px; margin-top:16px">Bayar</button>
+</div>
+<div class="status" id="kasir-msg"></div>
+</div>
+</div>
+</section>
+
+<!-- RIWAYAT -->
+<section class="panel" id="panel-riwayat">
+<div class="card">
+<h2>Riwayat Order</h2>
+<input type="text" id="r-cari" placeholder="Cari nomor order atau pelanggan">
+<div class="chips" id="r-chips">
+<button data-rf="Semua" class="active">Semua</button>
+<button data-rf="Selesai">Selesai</button>
+<button data-rf="Pending">Pending</button>
+<button data-rf="Dibatalkan">Dibatalkan</button>
+</div>
+<div class="stat-grid">
+<div class="stat-box"><div class="l">Total bulan ini</div><div class="n" id="r-bulan-total">Rp0</div></div>
+<div class="stat-box"><div class="l">Transaksi bulan ini</div><div class="n" id="r-bulan-trx">0</div></div>
+<div class="stat-box"><div class="l">Rata-rata per transaksi</div><div class="n" id="r-bulan-rata">Rp0</div></div>
+</div>
+<div class="status" id="r-msg"></div>
+<div id="r-list"></div>
+</div>
+</section>
+
+<!-- KELOLA -->
+<section class="panel" id="panel-kelola">
+<div class="chips" id="k-chips">
+<button data-k="produk" class="active">Produk</button>
+<button data-k="pelanggan">Pelanggan</button>
+<button data-k="stok">Stok</button>
+<button data-k="pembelian">Pembelian</button>
+<button data-k="kas">Kas</button>
+</div>
+
+<div class="card" id="k-produk">
+<h2 id="form-title">Tambah Produk</h2>
+<p class="sub" id="katalog-meta"></p>
+<input type="hidden" id="pr-id">
+<div class="row">
+<div><label class="f">Nama produk</label><input type="text" id="pr-nama" placeholder="Contoh: Fanta 1L"></div>
+<div><label class="f">SKU</label><input type="text" id="pr-sku" placeholder="Contoh: MIN02"></div>
+<div><label class="f">Kategori</label><input type="text" id="pr-kategori" placeholder="Contoh: Minuman"></div>
+</div>
+<div class="row">
+<div><label class="f">Harga jual (Rp)</label><input type="number" id="pr-jual" min="0" placeholder="16000"></div>
+<div><label class="f">Harga modal (Rp)</label><input type="number" id="pr-modal" min="0" placeholder="13500"></div>
+<div><label class="f">Stok</label><input type="number" id="pr-stok" min="0" placeholder="50"></div>
+<div><label class="f">Stok minimum</label><input type="number" id="pr-stokmin" min="0" value="10"></div>
+</div>
+<div class="row">
+<button class="go" id="pr-simpan" style="flex:1 1 160px">Simpan Produk</button>
+<button class="ghost" id="pr-batal" style="flex:1 1 120px; display:none">Batal Edit</button>
+</div>
+<div class="status" id="pr-msg"></div>
+<table id="pr-tabel"></table>
+</div>
+
+<div class="card" id="k-pelanggan" style="display:none">
+<h2>Pelanggan</h2>
+<p class="sub">Pelanggan bisa dipilih saat transaksi di kasir. Total belanja dihitung dari order selesai.</p>
+<div class="row">
+<div><label class="f">Nama pelanggan</label><input type="text" id="pl-nama" placeholder="Nama lengkap"></div>
+<div><label class="f">Nomor HP</label><input type="text" id="pl-hp" placeholder="08xx"></div>
+</div>
+<button class="go" id="pl-tambah">Tambah Pelanggan</button>
+<div class="status" id="pl-msg"></div>
+<table id="pl-tabel"></table>
+</div>
+
+<div class="card" id="k-stok" style="display:none">
+<h2>Stok dan Mutasi</h2>
+<p class="sub" id="stok-meta"></p>
+<table id="st-tabel"></table>
+<h2 style="margin-top:22px">Riwayat Mutasi Terakhir</h2>
+<label class="f">Saring per produk</label>
+<select id="mut-produk"></select>
+<table id="mut-tabel"></table>
+</div>
+
+<div class="card" id="k-pembelian" style="display:none">
+<h2>Pembelian (Restock dari Supplier)</h2>
+<p class="sub">Mencatat pembelian menambah stok dan masuk riwayat mutasi.</p>
+<div class="row">
+<div><label class="f">Produk</label><select id="pb-produk"></select></div>
+<div><label class="f">Jumlah</label><input type="number" id="pb-qty" min="1" placeholder="10"></div>
+<div><label class="f">Harga beli satuan (Rp)</label><input type="number" id="pb-harga" min="0" placeholder="13000"></div>
+<div><label class="f">Supplier</label><input type="text" id="pb-supplier" placeholder="Nama supplier"></div>
+</div>
+<button class="go" id="pb-simpan">Simpan Pembelian</button>
+<div class="status" id="pb-msg"></div>
+<table id="pb-tabel"></table>
+</div>
+
+<div class="card" id="k-kas" style="display:none">
+<h2>Buku Kas</h2>
+<p class="sub">Catat kas masuk dan keluar di luar penjualan, misalnya saldo awal, biaya operasional, atau setoran. Saldo kas di Beranda = kas di sini + semua penjualan tunai.</p>
+<div class="row">
+<div><label class="f">Jenis</label><select id="ks-tipe"><option value="masuk">Kas Masuk</option><option value="keluar">Kas Keluar</option></select></div>
+<div><label class="f">Keterangan</label><input type="text" id="ks-ket" placeholder="Contoh: Saldo awal, Beli plastik, Setoran bank"></div>
+<div><label class="f">Jumlah (Rp)</label><input type="number" id="ks-jumlah" min="0" placeholder="100000"></div>
+</div>
+<button class="go" id="ks-simpan">Simpan Catatan Kas</button>
+<div class="status" id="ks-msg"></div>
+<table id="ks-tabel"></table>
+</div>
+</section>
+
+<!-- LAPORAN -->
+<section class="panel" id="panel-laporan">
+<div class="card">
+<h2>Laporan Penjualan</h2>
+<p class="sub">Persentase dibandingkan dengan hari sebelumnya. Hanya order Selesai yang dihitung.</p>
+<div class="row">
+<div><label class="f">Tanggal</label><input type="date" id="lp-tanggal"></div>
+<div><label class="f">Nama toko (muncul di struk)</label><input type="text" id="lp-toko" placeholder="Toko Saya"></div>
+</div>
+<div class="stat-grid">
+<div class="stat-box"><div class="l">Penjualan</div><div class="n" id="lp-jual">Rp0</div><div class="delta" id="lp-jual-d"></div></div>
+<div class="stat-box"><div class="l">Transaksi</div><div class="n" id="lp-trx">0</div><div class="delta" id="lp-trx-d"></div></div>
+<div class="stat-box"><div class="l">Laba Kotor</div><div class="n" id="lp-laba">Rp0</div><div class="delta" id="lp-laba-d"></div></div>
+<div class="stat-box"><div class="l">Rata-rata per transaksi</div><div class="n" id="lp-rata">Rp0</div><div class="delta" id="lp-rata-d"></div></div>
+<div class="stat-box"><div class="l">Margin Laba</div><div class="n" id="lp-margin">0%</div><div class="delta" id="lp-margin-d"></div></div>
+<div class="stat-box"><div class="l">Item Terjual</div><div class="n" id="lp-item">0</div><div class="delta" id="lp-item-d"></div></div>
+</div>
+</div>
+<div class="card">
+<h2>Metode Pembayaran</h2>
+<div id="lp-metode"></div>
+</div>
+<div class="card">
+<h2>Pelanggan Belanja Terbanyak</h2>
+<div id="lp-pelanggan"></div>
+</div>
+<div class="card">
+<h2>Penjualan per Jam</h2>
+<p class="sub" id="lp-jam-meta"></p>
+<div id="lp-jam"></div>
+</div>
+<div class="card">
+<h2>Produk Terlaris</h2>
+<div id="lp-laris"></div>
+<div class="row">
+<button class="ghost" id="lp-ekspor" style="flex:1 1 160px">Ekspor Semua Transaksi (CSV)</button>
+</div>
+<div class="status" id="lp-msg"></div>
+<table id="lp-tabel"></table>
+</div>
+</section>
+
+<footer>Laris &middot; data tersimpan lokal di browser ini (localStorage) &middot; ekspor CSV berkala sebagai cadangan</footer>
+</div>
+
+<!-- STRUK -->
+<div id="struk-overlay">
+<div id="struk">
+<h3 id="st-toko">Toko Saya</h3>
+<div class="c" id="st-no">-</div>
+<div class="c" id="st-waktu">-</div>
+<div class="c" id="st-pelanggan">-</div>
+<hr>
+<div id="st-items"></div>
+<hr>
+<div class="r"><span>Total</span><span id="st-total">Rp0</span></div>
+<div class="r"><span id="st-metode">Tunai</span><span id="st-bayar">Rp0</span></div>
+<div class="r"><span>Kembali</span><span id="st-kembali">Rp0</span></div>
+<hr>
+<div class="c">Terima kasih sudah berbelanja</div>
+<div class="btns">
+<button class="go" id="st-cetak" style="margin-top:0; flex:1 1 100px">Cetak</button>
+<button class="ghost" id="st-wa" style="margin-top:0; flex:1 1 100px">Kirim WhatsApp</button>
+<button class="ghost" id="st-tutup" style="margin-top:0; flex:1 1 100px">Transaksi Baru</button>
+</div>
+</div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
